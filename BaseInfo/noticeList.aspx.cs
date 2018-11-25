@@ -1,0 +1,28 @@
+﻿using System;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+public partial class BaseInfo_noticeList : Page
+{
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        if (!IsPostBack)
+        {
+            BaseClass bc = new BaseClass();
+            DataList1.DataSource = bc.GetDataSet("select * from notice", "notice");
+            DataList1.DataKeyField = "noticeID";
+            DataList1.DataBind();
+        }
+    }
+
+    protected void DataList1_DeleteCommand(object source, DataListCommandEventArgs e)
+    {
+        int str = (int) DataList1.DataKeys[e.Item.ItemIndex];
+        BaseClass bc = new BaseClass();
+        bool bl;
+        bl = bc.ExecSQL("delete from notice where noticeID='" + str + "'");
+        DataList1.DataSource = bc.GetDataSet("select * from notice", "notice");
+        DataList1.DataKeyField = "noticeID";
+        DataList1.DataBind();
+    }
+}
